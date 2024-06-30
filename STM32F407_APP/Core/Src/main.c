@@ -38,7 +38,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 #define MAJOR 0   //APP Major version Number
-#define MINOR 1   //APP Minor version Number
+#define MINOR 2   //APP Minor version Number
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -101,9 +101,9 @@ int main(void)
   while (1)
   {
 	  		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,1);
-	  		HAL_Delay(500);
+	  		HAL_Delay(2000);
 	  		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,0);
-	  		HAL_Delay(500);
+	  		HAL_Delay(2000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -215,7 +215,24 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief Print the characters to UART (printf).
+  * @retval int
+  */
+#ifdef __GNUC__
+  /* With GCC, small printf (option LD Linker->Libraries->Small printf
+     set to 'Yes') calls __io_putchar() */
+int __io_putchar(int ch)
+#else
+int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the UART3 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
 
+  return ch;
+}
 /* USER CODE END 4 */
 
 /**

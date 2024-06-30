@@ -1,0 +1,95 @@
+!SESSION 2024-06-27 08:54:59.533 -----------------------------------------------
+eclipse.buildId=Version 1.15.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-06-27 08:55:31.551
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-06-27 08:55:31.565
+!MESSAGE Log4j2 initialized with config file C:\Users\Admin\Desktop\Minh_Quan\ARM\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-06-27 08:55:34.399
+!MESSAGE Started RMI Server, listening on port 41338
+
+!ENTRY org.eclipse.ui.ide 4 0 2024-06-27 08:56:30.746
+!MESSAGE Could not import project located at C:\Users\Admin\Desktop\Minh_Quan\ARM\.metadata
+!STACK 0
+org.eclipse.ui.internal.wizards.datatransfer.CouldNotImportProjectException: Could not import project located at C:\Users\Admin\Desktop\Minh_Quan\ARM\.metadata
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.toExistingOrNewProject(SmartImportJob.java:564)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.run(SmartImportJob.java:251)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.core.internal.resources.ResourceException: Invalid project description.
+	at org.eclipse.core.internal.resources.Project.checkDescription(Project.java:211)
+	at org.eclipse.core.internal.resources.Project.assertCreateRequirements(Project.java:95)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:305)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:291)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.createOrImportProject(SmartImportJob.java:603)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.toExistingOrNewProject(SmartImportJob.java:551)
+	... 2 more
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-06-27 08:56:52.215
+!MESSAGE Indexed 'STM32F4_Bootloader' (22 sources, 119 headers) in 4.53 sec: 11,678 declarations; 42,890 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.44%)
+!SESSION 2024-06-28 08:43:48.097 -----------------------------------------------
+eclipse.buildId=Version 1.15.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-06-28 08:44:23.322
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-06-28 08:44:23.354
+!MESSAGE Log4j2 initialized with config file C:\Users\Admin\Desktop\Minh_Quan\ARM\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-06-28 08:44:33.716
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.jobs 2 2 2024-06-28 08:44:38.582
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$39
+!SESSION 2024-06-28 08:44:53.158 -----------------------------------------------
+eclipse.buildId=Version 1.15.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  C:\Users\Admin\Desktop\Minh_Quan\ARM\STM32F407VE_Bootloader\STM32-bootloader\STM32-bootloader\STM32F4_Bootloader\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\Admin\Desktop\Minh_Quan\ARM\STM32F407VE_Bootloader\STM32-bootloader\STM32-bootloader\STM32F4_Bootloader\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-06-28 08:44:59.065
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-06-28 08:44:59.067
+!MESSAGE Log4j2 initialized with config file C:\Users\Admin\Desktop\Minh_Quan\ARM\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-06-28 08:45:06.469
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-06-28 08:45:12.950
+!MESSAGE Indexed 'STM32F4_Bootloader' (23 sources, 125 headers) in 6.11 sec: 12,072 declarations; 43,694 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.43%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-06-28 08:45:16.272
+!MESSAGE Indexed 'STM32F4_Bootloader' (23 sources, 125 headers) in 2.32 sec: 12,072 declarations; 43,694 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.43%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-06-28 08:45:56.163
+!MESSAGE Indexed 'STM32F4_Bootloader' (23 sources, 125 headers) in 5.43 sec: 12,072 declarations; 43,694 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.43%)
+!SESSION 2024-06-28 08:48:55.891 -----------------------------------------------
+eclipse.buildId=Version 1.15.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-06-28 08:49:02.046
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-06-28 08:49:02.048
+!MESSAGE Log4j2 initialized with config file C:\Users\Admin\Desktop\Minh_Quan\ARM\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-06-28 08:49:07.951
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-06-28 08:51:01.133
+!MESSAGE Indexed 'STM32F407_APP' (22 sources, 119 headers) in 5.22 sec: 11,672 declarations; 42,894 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.44%)

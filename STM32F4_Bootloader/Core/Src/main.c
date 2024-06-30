@@ -98,7 +98,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("Starting Bootloader(%d.%d)\r\n", BL_Version[0], BL_Version[1] );
   HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,0); // Turn ON led
-  HAL_Delay(1000);
+  // HAL_Delay(1000);
 
   GPIO_PinState OTA_Pin_state;
   uint32_t end_tick = HAL_GetTick() + 3000;   // from now to 3 Seconds

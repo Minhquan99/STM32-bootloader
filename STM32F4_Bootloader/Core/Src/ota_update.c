@@ -41,7 +41,7 @@ ETX_OTA_EX_ etx_ota_download_and_flash( void )
   ota_fw_received_size = 0u;
   ota_fw_crc           = 0u;
   ota_state            = ETX_OTA_STATE_START;
-
+ memset( Rx_Buffer, 0, ETX_OTA_PACKET_MAX_SIZE );
   do
   {
     //clear the buffer
@@ -58,7 +58,7 @@ ETX_OTA_EX_ etx_ota_download_and_flash( void )
       //didn't received data. break.
       ret = ETX_OTA_EX_ERR;
     }
-
+    memset( Rx_Buffer, 0, ETX_OTA_PACKET_MAX_SIZE );
     //Send ACK or NACK
     if( ret != ETX_OTA_EX_OK )
     {
@@ -68,7 +68,7 @@ ETX_OTA_EX_ etx_ota_download_and_flash( void )
     }
     else
     {
-      //printf("Sending ACK\r\n");
+      printf("Sending ACK main\r\n");
       etx_ota_send_resp( ETX_OTA_ACK );
     }
 
@@ -86,14 +86,14 @@ ETX_OTA_EX_ etx_ota_download_and_flash( void )
 static ETX_OTA_EX_ etx_process_data( uint8_t *buf, uint16_t len )
 {
   ETX_OTA_EX_ ret = ETX_OTA_EX_ERR;
-
+  printf(" Run etx_process_data \r\n");
   do
   {
     if( ( buf == NULL ) || ( len == 0u) )
     {
+      printf("buf == NULL ) || ( len == 0u)\r\n");
       break;
     }
-
     //Check we received OTA Abort command
     ETX_OTA_COMMAND_ *cmd = (ETX_OTA_COMMAND_*)buf;
     if( cmd->packet_type == ETX_OTA_PACKET_TYPE_CMD )
@@ -104,7 +104,7 @@ static ETX_OTA_EX_ etx_process_data( uint8_t *buf, uint16_t len )
         break;
       }
     }
-
+    printf("ota_state %d \r\n",ota_state);
     switch( ota_state )
     {
       case ETX_OTA_STATE_IDLE:
@@ -117,7 +117,7 @@ static ETX_OTA_EX_ etx_process_data( uint8_t *buf, uint16_t len )
       case ETX_OTA_STATE_START:
       {
         ETX_OTA_COMMAND_ *cmd = (ETX_OTA_COMMAND_*)buf;
-
+        printf(" cmd->packet_type %d  cmd->cmd = %d \r\n ", cmd->packet_type,cmd->cmd);
         if( cmd->packet_type == ETX_OTA_PACKET_TYPE_CMD )
         {
           if( cmd->cmd == ETX_OTA_CMD_START )
@@ -192,12 +192,14 @@ static ETX_OTA_EX_ etx_process_data( uint8_t *buf, uint16_t len )
       default:
       {
         /* Should not come here */
+         printf("444444444444444444444\r\n");
+
         ret = ETX_OTA_EX_ERR;
       }
       break;
     };
   }while( false );
-
+  printf("REt = %d \r\n",ret);
   return ret;
 }
 
@@ -212,63 +214,139 @@ static uint16_t etx_receive_chunk( uint8_t *buf, uint16_t max_len )
   int16_t  ret;
   uint16_t index     = 0u;
   uint16_t data_len;
-
+  uint8_t rxData[10];  // Bộ đệm để lưu trữ dữ liệu nhận được
+  printf("Run etx_receive_chunk ota_state %d \r\n", ota_state);
   do
   {
     //receive SOF byte (1byte)
     ret = HAL_UART_Receive( &huart2, &buf[index], 1, HAL_MAX_DELAY );
+    printf("Recieve SOF  byte index %d  is %d done  \r\n",index,buf[index]);
+
+    // if( buf[index++] != ETX_OTA_SOF )
+    // {
+    //   //Not received start of frame
+    //   ret = ETX_OTA_EX_ERR;
+    //   break;
+    // }
+      index++;
+
     if( ret != HAL_OK )
     {
       break;
     }
-
-    if( buf[index++] != ETX_OTA_SOF )
-    {
-      //Not received start of frame
-      ret = ETX_OTA_EX_ERR;
-      break;
+    else{
+      printf("Sending ACK\r\n");
+      etx_ota_send_resp( ETX_OTA_ACK );
     }
-
     //Receive the packet type (1byte).
     ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+    printf("Recieve packet type index %d  is %d done \r\n",index-1,buf[index-1]);
     if( ret != HAL_OK )
     {
       break;
     }
+    else{
+      printf("Sending ACK\r\n");
+      etx_ota_send_resp( ETX_OTA_ACK );
+    }
+    
+    
 
     //Get the data length (2bytes).
-    ret = HAL_UART_Receive( &huart2, &buf[index], 2, HAL_MAX_DELAY );
+    ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+    printf("Recieve data length index %d  is %d done \r\n",index-1, buf[index-1]);
     if( ret != HAL_OK )
     {
       break;
     }
-    data_len = *(uint16_t *)&buf[index];
-    index += 2u;
-
+    else{
+      printf("Sending ACK\r\n");
+      etx_ota_send_resp( ETX_OTA_ACK );
+    }
+    ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+    printf("Recieve data length index %d  is %d done \r\n",index-1, buf[index-1]);
+    if( ret != HAL_OK )
+    {
+      break;
+    }
+    else{
+      printf("Sending ACK\r\n");
+      etx_ota_send_resp( ETX_OTA_ACK );
+    }
+    // data_len = *(uint16_t *)&buf[index];
+    data_len = (uint16_t)(buf[3] << 8 | buf[2]);
+    //index += 2u;
+    printf("DATA LEN = %d \r\n",data_len);
     for( uint16_t i = 0u; i < data_len; i++ )
     {
       ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+      //printf("Receive data index %d buf %d  is %d\r\n",index-1,i,buf[index-1]);
       if( ret != HAL_OK )
       {
         break;
       }
+      else{
+        // printf("Sending ACK\r\n");
+         etx_ota_send_resp( ETX_OTA_ACK );
+      }
+     
     }
-
+      printf("Recieve data  done \r\n");
     //Get the CRC.
-    ret = HAL_UART_Receive( &huart2, &buf[index], 4, HAL_MAX_DELAY );
+    ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+    printf("Recieve crc index %d is %d  done \r\n",index-1,buf[index-1] );
     if( ret != HAL_OK )
     {
       break;
     }
-    index += 4u;
-
+    else{
+       printf("Sending ACK\r\n");
+       etx_ota_send_resp( ETX_OTA_ACK );
+    }
+    ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+    printf("Recieve crc index %d is %d  done \r\n",index-1,buf[index-1] );
+    if( ret != HAL_OK )
+    {
+      break;
+    }
+    else{
+       printf("Sending ACK\r\n");
+       etx_ota_send_resp( ETX_OTA_ACK );
+    }
+    ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+    printf("Recieve crc index %d is %d  done \r\n",index-1,buf[index-1] );
+    if( ret != HAL_OK )
+    {
+      break;
+    }
+    else{
+       printf("Sending ACK\r\n");
+       etx_ota_send_resp( ETX_OTA_ACK );
+    }
+    ret = HAL_UART_Receive( &huart2, &buf[index++], 1, HAL_MAX_DELAY );
+    printf("Recieve crc index %d is %d  done \r\n",index-1,buf[index-1] );
+    if( ret != HAL_OK )
+    {
+      break;
+    }
+    else{
+       printf("Sending ACK\r\n");
+       etx_ota_send_resp( ETX_OTA_ACK );
+    }
+    // index += 4u;
+    printf("Recieve crc  done \r\n");
     //TODO: Add CRC verification
 
     //receive EOF byte (1byte)
     ret = HAL_UART_Receive( &huart2, &buf[index], 1, HAL_MAX_DELAY );
+    printf("Recieve EOF byte index %d is %d  done \r\n",index,buf[index] );
     if( ret != HAL_OK )
     {
       break;
+    }
+    else{
+       printf("Sending ACK\r\n");
+       etx_ota_send_resp( ETX_OTA_ACK );
     }
 
     if( buf[index++] != ETX_OTA_EOF )
@@ -277,7 +355,7 @@ static uint16_t etx_receive_chunk( uint8_t *buf, uint16_t max_len )
       ret = ETX_OTA_EX_ERR;
       break;
     }
-
+    printf("Recieve EOF  done \r\n");
   }while( false );
 
   if( ret != HAL_OK )
@@ -352,12 +430,13 @@ static HAL_StatusTypeDef write_data_to_flash_app( uint8_t *data,
       EraseInitStruct.VoltageRange  = FLASH_VOLTAGE_RANGE_3;
 
       ret = HAL_FLASHEx_Erase( &EraseInitStruct, &SectorError );
+      printf("Erasing the Flash memory done \r\n");
       if( ret != HAL_OK )
       {
         break;
       }
     }
-
+    printf("Write data len = %d \r\n",data_len);
     for(int i = 0; i < data_len; i++ )
     {
       ret = HAL_FLASH_Program( FLASH_TYPEPROGRAM_BYTE,
@@ -375,6 +454,7 @@ static HAL_StatusTypeDef write_data_to_flash_app( uint8_t *data,
         break;
       }
     }
+      printf("Flash Write %d data done \r\n",data_len);
 
     if( ret != HAL_OK )
     {

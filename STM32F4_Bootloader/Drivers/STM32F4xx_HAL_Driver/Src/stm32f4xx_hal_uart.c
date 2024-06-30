@@ -1223,7 +1223,7 @@ HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, ui
   uint8_t  *pdata8bits;
   uint16_t *pdata16bits;
   uint32_t tickstart = 0U;
-
+  // printf("HAL_UART_Receive \r\n");
   /* Check that a Rx process is not already ongoing */
   if (huart->RxState == HAL_UART_STATE_READY)
   {
@@ -1238,7 +1238,7 @@ HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, ui
 
     /* Init tickstart for timeout management */
     tickstart = HAL_GetTick();
-
+    // printf("HAL_UART_Receive Init tickstart \r\n");
     huart->RxXferSize = Size;
     huart->RxXferCount = Size;
 
@@ -1253,23 +1253,28 @@ HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, ui
       pdata8bits  = pData;
       pdata16bits = NULL;
     }
-
+    // printf("HAL_UART_Receive pData \r\n");
     /* Check the remain data to be received */
+    // printf(" out while huart->RxXferCount %d \r\n", huart->RxXferCount);
     while (huart->RxXferCount > 0U)
     {
+      // printf(" In while huart->RxXferCount %d \r\n", huart->RxXferCount);
       if (UART_WaitOnFlagUntilTimeout(huart, UART_FLAG_RXNE, RESET, tickstart, Timeout) != HAL_OK)
       {
         huart->RxState = HAL_UART_STATE_READY;
-
+         printf("HAL_UART_Receive return HAL_TIMEOUT \r\n");
         return HAL_TIMEOUT;
       }
       if (pdata8bits == NULL)
       {
         *pdata16bits = (uint16_t)(huart->Instance->DR & 0x01FF);
         pdata16bits++;
+        // printf("HAL_UART_Receive pdata8bits == NULL \r\n");
+
       }
       else
       {
+        // printf("HAL_UART_Receive pdata8bit != NULL \r\n");
         if ((huart->Init.WordLength == UART_WORDLENGTH_9B) || ((huart->Init.WordLength == UART_WORDLENGTH_8B) && (huart->Init.Parity == UART_PARITY_NONE)))
         {
           *pdata8bits = (uint8_t)(huart->Instance->DR & (uint8_t)0x00FF);
@@ -1285,11 +1290,13 @@ HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, ui
 
     /* At end of Rx process, restore huart->RxState to Ready */
     huart->RxState = HAL_UART_STATE_READY;
-
+    //printf("HAL_UART_Receive return HAL_UART_STATE_READY \r\n");
     return HAL_OK;
   }
   else
   {
+    printf("HAL_UART_Receive return HAL_BUSY \r\n");
+
     return HAL_BUSY;
   }
 }
