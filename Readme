@@ -1,1 +1,2 @@
 This project will create bootloader for stm32f407VET
+And HostApp tool can update firmware from PC to STM throught UART
